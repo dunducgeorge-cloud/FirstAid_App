@@ -1,4 +1,4 @@
-package com.example.firstaidapp
+package com.proiect.firstaidapp
 
 import android.content.Intent
 import android.net.Uri

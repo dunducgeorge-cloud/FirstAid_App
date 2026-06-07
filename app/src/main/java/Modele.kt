@@ -1,4 +1,4 @@
-package com.example.firstaidapp
+package com.proiect.firstaidapp
 
 data class ProfilMedical(
     val id: String = java.util.UUID.randomUUID().toString(),

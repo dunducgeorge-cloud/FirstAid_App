@@ -1,4 +1,4 @@
-package com.example.firstaidapp.ui.theme
+package com.proiect.firstaidapp.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
