@@ -33,7 +33,7 @@ fun ListaProfileScreen(profile: List<ProfilMedical>, onAddClick: () -> Unit, onB
                     Row(modifier = Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
                         Column(modifier = Modifier.weight(1f)) {
                             Text(p.nume, fontWeight = FontWeight.Bold, fontSize = 18.sp)
-                            Text("Grupa: ${p.grupa}", color = Color.Gray)
+                            Text("Varsta: ${p.grupa}", color = Color.Gray)
                             Text("Alergii: ${p.alergii}", fontSize = 14.sp)
                         }
                         IconButton(onClick = { onDelete(p) }) { Icon(Icons.Default.Delete, contentDescription = null, tint = Color(0xFFE53935)) }
