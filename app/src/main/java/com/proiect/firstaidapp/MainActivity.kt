@@ -128,8 +128,8 @@ class MainActivity : ComponentActivity() {
                                 }
                             )
                             "adauga_profil" -> AdaugaProfilScreen(
-                                onSave = { numeProfil, grupaMedicala, alergiiProfil ->
-                                    profileState.add(ProfilMedical(nume = numeProfil, grupa = grupaMedicala, alergii = alergiiProfil))
+                                onSave = { numeProfil, varsta, alergiiProfil ->
+                                    profileState.add(ProfilMedical(nume = numeProfil, varsta = varsta, alergii = alergiiProfil))
                                     saveProfilesForUser(emailLogat, profileState)
                                     currentScreen = "lista_profile"
                                 },
