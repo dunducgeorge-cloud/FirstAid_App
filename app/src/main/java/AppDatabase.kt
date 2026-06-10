@@ -5,9 +5,11 @@ import androidx.room.RoomDatabase
 
 @Database(
     entities = [ProfilMedical::class, PostEntity::class],
-    version = 2
+    version = 2,
+    exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
     abstract fun profilDao(): ProfilDao
     abstract fun postDao(): PostDao
 }
+

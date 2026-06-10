@@ -74,6 +74,7 @@ fun HomeScreen(
     onTriajClick: () -> Unit,
     onPostsClick: () -> Unit,
     onCreatePostClick: () -> Unit,
+    onCovidClick: () -> Unit,
     onLogout: () -> Unit
 ) {
     val context = LocalContext.current
@@ -142,7 +143,7 @@ fun HomeScreen(
                 shape = RoundedCornerShape(16.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF455A64))
             ) {
-                Text("PROFILE MEDICALE (ICE)", fontSize = 16.sp)
+                Text("PROFILE MEDICALE", fontSize = 16.sp)
             }
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -158,6 +159,15 @@ fun HomeScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
+            Button(
+                onClick = onCovidClick,
+                modifier = Modifier.fillMaxWidth().height(70.dp),
+                shape = RoundedCornerShape(16.dp),
+            ) {
+                Text("INFORMATII COVID - OMS")
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
 
             Button(
                 onClick = onCreatePostClick,

@@ -27,7 +27,6 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-
         db = Room.databaseBuilder(
             applicationContext,
             AppDatabase::class.java,
@@ -48,7 +47,6 @@ class MainActivity : ComponentActivity() {
                 var urgentaSelectata by remember { mutableStateOf("") }
                 val context = LocalContext.current
                 val profileState = remember { mutableStateListOf<ProfilMedical>() }
-
 
                 LaunchedEffect(emailLogat) {
                     if (emailLogat.isNotEmpty()) {
@@ -81,7 +79,6 @@ class MainActivity : ComponentActivity() {
 
                         when (currentScreen) {
 
-
                             "login" -> LoginScreen(
                                 mainActivity = this@MainActivity,
                                 onLoginSuccess = { email ->
@@ -91,7 +88,6 @@ class MainActivity : ComponentActivity() {
                                 onGoToSignup = { currentScreen = "signup" }
                             )
 
-
                             "signup" -> SignupScreen(
                                 onSignupSuccess = { userEmail, userPass ->
                                     saveUser(User(userEmail, userPass))
@@ -100,7 +96,6 @@ class MainActivity : ComponentActivity() {
                                 onBack = { currentScreen = "login" }
                             )
 
-
                             "home" -> HomeScreen(
                                 userEmail = emailLogat,
                                 onGhidClick = { currentScreen = "ghid" },
@@ -108,6 +103,7 @@ class MainActivity : ComponentActivity() {
                                 onTriajClick = { currentScreen = "triaj" },
                                 onPostsClick = { currentScreen = "posts" },
                                 onCreatePostClick = { currentScreen = "create_post" },
+                                onCovidClick = { currentScreen = "covid" },
                                 onLogout = {
                                     emailLogat = ""
                                     profileState.clear()
@@ -115,9 +111,7 @@ class MainActivity : ComponentActivity() {
                                 }
                             )
 
-
                             "triaj" -> TriajScreen { currentScreen = "home" }
-
 
                             "ghid" -> GhidScreen(
                                 onBackClick = { currentScreen = "home" },
@@ -127,11 +121,9 @@ class MainActivity : ComponentActivity() {
                                 }
                             )
 
-
                             "detalii" -> DetaliiScreen(urgentaSelectata) {
                                 currentScreen = "ghid"
                             }
-
 
                             "lista_profile" -> ListaProfileScreen(
                                 profile = profileState,
@@ -144,7 +136,6 @@ class MainActivity : ComponentActivity() {
                                     profileState.remove(profil)
                                 }
                             )
-
 
                             "adauga_profil" -> AdaugaProfilScreen(
                                 onSave = { numeProfil, grupaMedicala, alergiiProfil ->
@@ -165,15 +156,17 @@ class MainActivity : ComponentActivity() {
                                 onBackClick = { currentScreen = "lista_profile" }
                             )
 
-
                             "posts" -> PostsScreen(
                                 onBack = { currentScreen = "home" }
                             )
 
 
-
                             "create_post" -> CreatePostScreen(
-                                onBack = { currentScreen = "posts" }
+                                onBack = { currentScreen = "home" }
+                            )
+
+                            "covid" -> CovidScreen(
+                                onBack = { currentScreen = "home" }
                             )
                         }
                     }
@@ -182,12 +175,10 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-
     fun saveUser(user: User) {
         val sharedPref = getSharedPreferences("UserAccounts", MODE_PRIVATE)
         sharedPref.edit().putString("user_${user.email}", user.parola).apply()
     }
-
 
     fun checkUser(email: String, parola: String): Boolean {
         val sharedPref = getSharedPreferences("UserAccounts", MODE_PRIVATE)
