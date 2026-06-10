@@ -26,7 +26,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // 🔵 INITIALIZARE ROOM
+
         db = Room.databaseBuilder(
             applicationContext,
             AppDatabase::class.java,
@@ -45,7 +45,7 @@ class MainActivity : ComponentActivity() {
                 val context = LocalContext.current
                 val profileState = remember { mutableStateListOf<ProfilMedical>() }
 
-                // 🔵 ÎNCĂRCARE PROFILE DIN ROOM
+
                 LaunchedEffect(emailLogat) {
                     if (emailLogat.isNotEmpty()) {
                         val lista = withContext(Dispatchers.IO) { dao.getAllProfiles() }
@@ -67,12 +67,16 @@ class MainActivity : ComponentActivity() {
                                 },
                                 containerColor = Color(0xFFE53935),
                                 contentColor = Color.White
-                            ) { Icon(Icons.Default.Call, contentDescription = null) }
+                            ) {
+                                Icon(Icons.Default.Call, contentDescription = null)
+                            }
                         }
                     }
                 ) { innerPadding ->
                     Box(modifier = Modifier.padding(innerPadding)) {
+
                         when (currentScreen) {
+
 
                             "login" -> LoginScreen(
                                 mainActivity = this@MainActivity,
@@ -83,6 +87,7 @@ class MainActivity : ComponentActivity() {
                                 onGoToSignup = { currentScreen = "signup" }
                             )
 
+
                             "signup" -> SignupScreen(
                                 onSignupSuccess = { userEmail, userPass ->
                                     saveUser(User(userEmail, userPass))
@@ -91,11 +96,14 @@ class MainActivity : ComponentActivity() {
                                 onBack = { currentScreen = "login" }
                             )
 
+
                             "home" -> HomeScreen(
                                 userEmail = emailLogat,
                                 onGhidClick = { currentScreen = "ghid" },
                                 onProfileClick = { currentScreen = "lista_profile" },
                                 onTriajClick = { currentScreen = "triaj" },
+                                onPostsClick = { currentScreen = "posts" },
+                                onCreatePostClick = { currentScreen = "create_post" },
                                 onLogout = {
                                     emailLogat = ""
                                     profileState.clear()
@@ -103,7 +111,9 @@ class MainActivity : ComponentActivity() {
                                 }
                             )
 
+
                             "triaj" -> TriajScreen { currentScreen = "home" }
+
 
                             "ghid" -> GhidScreen(
                                 onBackClick = { currentScreen = "home" },
@@ -113,7 +123,11 @@ class MainActivity : ComponentActivity() {
                                 }
                             )
 
-                            "detalii" -> DetaliiScreen(urgentaSelectata) { currentScreen = "ghid" }
+
+                            "detalii" -> DetaliiScreen(urgentaSelectata) {
+                                currentScreen = "ghid"
+                            }
+
 
                             "lista_profile" -> ListaProfileScreen(
                                 profile = profileState,
@@ -126,6 +140,7 @@ class MainActivity : ComponentActivity() {
                                     profileState.remove(profil)
                                 }
                             )
+
 
                             "adauga_profil" -> AdaugaProfilScreen(
                                 onSave = { numeProfil, grupaMedicala, alergiiProfil ->
@@ -145,36 +160,32 @@ class MainActivity : ComponentActivity() {
                                 },
                                 onBackClick = { currentScreen = "lista_profile" }
                             )
+
+
+                            "posts" -> PostsScreen()
+
+
+                            "create_post" -> CreatePostScreen(
+                                onBack = { currentScreen = "posts" }
+                            )
+
                         }
                     }
                 }
-
-                // 🔵 IMPORTANT: TEST API SCREEN TREBUIE SĂ FIE ULTIMUL
-                TestApiScreen()
             }
         }
     }
+
 
     fun saveUser(user: User) {
         val sharedPref = getSharedPreferences("UserAccounts", MODE_PRIVATE)
         sharedPref.edit().putString("user_${user.email}", user.parola).apply()
     }
 
+
     fun checkUser(email: String, parola: String): Boolean {
         val sharedPref = getSharedPreferences("UserAccounts", MODE_PRIVATE)
         val passSaved = sharedPref.getString("user_$email", null)
         return passSaved != null && passSaved == parola
-    }
-}
-
-@Composable
-fun TestApiScreen() {
-    LaunchedEffect(Unit) {
-        try {
-            val posts = RetrofitInstance.api.getPosts()
-            println("REZULTAT API: $posts")
-        } catch (e: Exception) {
-            println("EROARE API: ${e.message}")
-        }
     }
 }
