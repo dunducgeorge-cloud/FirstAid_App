@@ -16,26 +16,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.room.Room
 import com.proiect.firstaidapp.ui.theme.FirstAidAppTheme
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.*
 
 lateinit var db: AppDatabase
 lateinit var dao: ProfilDao
 
 class MainActivity : ComponentActivity() {
-    private val gson = Gson()
-
-    fun saveUser(user: User) {
-        val sharedPref = getSharedPreferences("UserAccounts", MODE_PRIVATE)
-        sharedPref.edit().putString("user_${user.email}", user.parola).apply()
-    }
-
-    fun checkUser(email: String, parola: String): Boolean {
-        val sharedPref = getSharedPreferences("UserAccounts", MODE_PRIVATE)
-        val passSaved = sharedPref.getString("user_$email", null)
-        return passSaved != null && passSaved == parola
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,6 +38,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             FirstAidAppTheme {
+
                 var currentScreen by remember { mutableStateOf("login") }
                 var emailLogat by remember { mutableStateOf("") }
                 var urgentaSelectata by remember { mutableStateOf("") }
@@ -133,7 +120,6 @@ class MainActivity : ComponentActivity() {
                                 onAddClick = { currentScreen = "adauga_profil" },
                                 onBackClick = { currentScreen = "home" },
                                 onDelete = { profil ->
-                                    // 🔵 ȘTERGERE DIN ROOM
                                     CoroutineScope(Dispatchers.IO).launch {
                                         dao.deleteProfil(profil)
                                     }
@@ -150,7 +136,6 @@ class MainActivity : ComponentActivity() {
                                         alergii = alergiiProfil
                                     )
 
-                                    // 🔵 SALVARE ÎN ROOM
                                     CoroutineScope(Dispatchers.IO).launch {
                                         dao.insertProfil(profilNou)
                                     }
@@ -163,7 +148,33 @@ class MainActivity : ComponentActivity() {
                         }
                     }
                 }
+
+                // 🔵 IMPORTANT: TEST API SCREEN TREBUIE SĂ FIE ULTIMUL
+                TestApiScreen()
             }
+        }
+    }
+
+    fun saveUser(user: User) {
+        val sharedPref = getSharedPreferences("UserAccounts", MODE_PRIVATE)
+        sharedPref.edit().putString("user_${user.email}", user.parola).apply()
+    }
+
+    fun checkUser(email: String, parola: String): Boolean {
+        val sharedPref = getSharedPreferences("UserAccounts", MODE_PRIVATE)
+        val passSaved = sharedPref.getString("user_$email", null)
+        return passSaved != null && passSaved == parola
+    }
+}
+
+@Composable
+fun TestApiScreen() {
+    LaunchedEffect(Unit) {
+        try {
+            val posts = RetrofitInstance.api.getPosts()
+            println("REZULTAT API: $posts")
+        } catch (e: Exception) {
+            println("EROARE API: ${e.message}")
         }
     }
 }
