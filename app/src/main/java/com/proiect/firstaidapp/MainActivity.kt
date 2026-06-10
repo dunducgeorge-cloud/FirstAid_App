@@ -14,26 +14,17 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.room.Room
 import com.proiect.firstaidapp.ui.theme.FirstAidAppTheme
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import kotlinx.coroutines.*
+
+lateinit var db: AppDatabase
+lateinit var dao: ProfilDao
 
 class MainActivity : ComponentActivity() {
     private val gson = Gson()
-
-    fun saveProfilesForUser(email: String, lista: List<ProfilMedical>) {
-        val sharedPref = getSharedPreferences("MedicalData", MODE_PRIVATE)
-        val json = gson.toJson(lista)
-        sharedPref.edit().putString("profile_$email", json).apply()
-    }
-
-    fun loadProfilesForUser(email: String): List<ProfilMedical> {
-        val sharedPref = getSharedPreferences("MedicalData", MODE_PRIVATE)
-        val json = sharedPref.getString("profile_$email", null)
-        if (json == null) return emptyList()
-        val type = object : TypeToken<List<ProfilMedical>>() {}.type
-        return gson.fromJson(json, type)
-    }
 
     fun saveUser(user: User) {
         val sharedPref = getSharedPreferences("UserAccounts", MODE_PRIVATE)
@@ -48,6 +39,16 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // 🔵 INITIALIZARE ROOM
+        db = Room.databaseBuilder(
+            applicationContext,
+            AppDatabase::class.java,
+            "first_aid_db"
+        ).build()
+
+        dao = db.profilDao()
+
         enableEdgeToEdge()
         setContent {
             FirstAidAppTheme {
@@ -57,10 +58,12 @@ class MainActivity : ComponentActivity() {
                 val context = LocalContext.current
                 val profileState = remember { mutableStateListOf<ProfilMedical>() }
 
+                // 🔵 ÎNCĂRCARE PROFILE DIN ROOM
                 LaunchedEffect(emailLogat) {
                     if (emailLogat.isNotEmpty()) {
+                        val lista = withContext(Dispatchers.IO) { dao.getAllProfiles() }
                         profileState.clear()
-                        profileState.addAll(loadProfilesForUser(emailLogat))
+                        profileState.addAll(lista)
                     }
                 }
 
@@ -83,6 +86,7 @@ class MainActivity : ComponentActivity() {
                 ) { innerPadding ->
                     Box(modifier = Modifier.padding(innerPadding)) {
                         when (currentScreen) {
+
                             "login" -> LoginScreen(
                                 mainActivity = this@MainActivity,
                                 onLoginSuccess = { email ->
@@ -91,6 +95,7 @@ class MainActivity : ComponentActivity() {
                                 },
                                 onGoToSignup = { currentScreen = "signup" }
                             )
+
                             "signup" -> SignupScreen(
                                 onSignupSuccess = { userEmail, userPass ->
                                     saveUser(User(userEmail, userPass))
@@ -98,6 +103,7 @@ class MainActivity : ComponentActivity() {
                                 },
                                 onBack = { currentScreen = "login" }
                             )
+
                             "home" -> HomeScreen(
                                 userEmail = emailLogat,
                                 onGhidClick = { currentScreen = "ghid" },
@@ -109,7 +115,9 @@ class MainActivity : ComponentActivity() {
                                     currentScreen = "login"
                                 }
                             )
+
                             "triaj" -> TriajScreen { currentScreen = "home" }
+
                             "ghid" -> GhidScreen(
                                 onBackClick = { currentScreen = "home" },
                                 onUrgentaClick = { urgenta ->
@@ -117,20 +125,37 @@ class MainActivity : ComponentActivity() {
                                     currentScreen = "detalii"
                                 }
                             )
+
                             "detalii" -> DetaliiScreen(urgentaSelectata) { currentScreen = "ghid" }
+
                             "lista_profile" -> ListaProfileScreen(
                                 profile = profileState,
                                 onAddClick = { currentScreen = "adauga_profil" },
                                 onBackClick = { currentScreen = "home" },
                                 onDelete = { profil ->
+                                    // 🔵 ȘTERGERE DIN ROOM
+                                    CoroutineScope(Dispatchers.IO).launch {
+                                        dao.deleteProfil(profil)
+                                    }
                                     profileState.remove(profil)
-                                    saveProfilesForUser(emailLogat, profileState)
                                 }
                             )
+
                             "adauga_profil" -> AdaugaProfilScreen(
                                 onSave = { numeProfil, grupaMedicala, alergiiProfil ->
-                                    profileState.add(ProfilMedical(nume = numeProfil, grupa = grupaMedicala, alergii = alergiiProfil))
-                                    saveProfilesForUser(emailLogat, profileState)
+
+                                    val profilNou = ProfilMedical(
+                                        nume = numeProfil,
+                                        grupa = grupaMedicala,
+                                        alergii = alergiiProfil
+                                    )
+
+                                    // 🔵 SALVARE ÎN ROOM
+                                    CoroutineScope(Dispatchers.IO).launch {
+                                        dao.insertProfil(profilNou)
+                                    }
+
+                                    profileState.add(profilNou)
                                     currentScreen = "lista_profile"
                                 },
                                 onBackClick = { currentScreen = "lista_profile" }

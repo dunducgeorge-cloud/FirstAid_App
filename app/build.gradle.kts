@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    id("kotlin-kapt") // 🔵 NECESAR pentru Room
 }
 
 android {
@@ -36,11 +37,9 @@ android {
         jvmTarget = "1.8"
     }
 
-
     buildFeatures {
         compose = true
     }
-
 
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.8"
@@ -58,10 +57,17 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
 
-
     implementation("com.google.code.gson:gson:2.10.1")
     implementation("androidx.compose.material:material-icons-extended")
 
+    // 🔵 ROOM DATABASE
+    implementation("androidx.room:room-runtime:2.6.1")
+    kapt("androidx.room:room-compiler:2.6.1")
+    implementation("androidx.room:room-ktx:2.6.1")
+
+    // 🔵 COROUTINES (pentru suspend fun)
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
 
     testImplementation(libs.junit)
     androidTestImplementation(platform(libs.androidx.compose.bom))
@@ -71,7 +77,6 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.test.manifest)
     debugImplementation(libs.androidx.compose.ui.tooling)
 }
-
 
 tasks.withType<com.android.build.gradle.internal.tasks.CheckAarMetadataTask>().configureEach {
     enabled = false
