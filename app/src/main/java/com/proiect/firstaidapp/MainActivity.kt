@@ -20,6 +20,7 @@ import kotlinx.coroutines.*
 
 lateinit var db: AppDatabase
 lateinit var dao: ProfilDao
+lateinit var postDao: PostDao
 
 class MainActivity : ComponentActivity() {
 
@@ -31,9 +32,12 @@ class MainActivity : ComponentActivity() {
             applicationContext,
             AppDatabase::class.java,
             "first_aid_db"
-        ).build()
+        )
+            .fallbackToDestructiveMigration()
+            .build()
 
         dao = db.profilDao()
+        postDao = db.postDao()
 
         enableEdgeToEdge()
         setContent {
@@ -162,13 +166,15 @@ class MainActivity : ComponentActivity() {
                             )
 
 
-                            "posts" -> PostsScreen()
+                            "posts" -> PostsScreen(
+                                onBack = { currentScreen = "home" }
+                            )
+
 
 
                             "create_post" -> CreatePostScreen(
                                 onBack = { currentScreen = "posts" }
                             )
-
                         }
                     }
                 }

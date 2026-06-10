@@ -33,7 +33,7 @@ fun CreatePostScreen(onBack: () -> Unit) {
         OutlinedTextField(
             value = body,
             onValueChange = { body = it },
-            label = { Text("Conținut") },
+            label = { Text("Continut") },
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -45,22 +45,18 @@ fun CreatePostScreen(onBack: () -> Unit) {
                 CoroutineScope(Dispatchers.IO).launch {
                     try {
 
-                        RetrofitInstance.api.createPost(
-                            Post(
-                                userId = 1,
+                        db.postDao().insertPost(
+                            PostEntity(
                                 title = title,
                                 body = body
                             )
                         )
 
-
                         withContext(Dispatchers.Main) {
-                            result = "Trimis cu succes!"
+                            result = "Postare salvata!"
                         }
 
-
                         delay(1500)
-
 
                         withContext(Dispatchers.Main) {
                             onBack()
@@ -77,7 +73,7 @@ fun CreatePostScreen(onBack: () -> Unit) {
             },
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("Trimite POST")
+            Text("Salveaza Postarea")
         }
 
         Spacer(modifier = Modifier.height(16.dp))
