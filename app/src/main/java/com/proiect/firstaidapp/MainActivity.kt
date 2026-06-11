@@ -139,11 +139,11 @@ class MainActivity : ComponentActivity() {
                             )
 
                             "adauga_profil" -> AdaugaProfilScreen(
-                                onSave = { numeProfil, grupaMedicala, alergiiProfil ->
+                                onSave = { numeProfil, varstaProfil, alergiiProfil ->
 
                                     val profilNou = ProfilMedical(
                                         nume = numeProfil,
-                                        grupa = grupaMedicala,
+                                        varsta = varstaProfil,
                                         alergii = alergiiProfil,
                                         ownerEmail = emailLogat
                                     )

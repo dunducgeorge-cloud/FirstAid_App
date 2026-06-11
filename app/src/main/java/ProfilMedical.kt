@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 data class ProfilMedical(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val nume: String,
-    val grupa: String,
+    val varsta: String,
     val alergii: String,
     val ownerEmail: String
 )
