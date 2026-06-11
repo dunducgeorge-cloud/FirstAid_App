@@ -9,8 +9,8 @@ import androidx.room.OnConflictStrategy
 @Dao
 interface ProfilDao {
 
-    @Query("SELECT * FROM profile_table")
-    suspend fun getAllProfiles(): List<ProfilMedical>
+    @Query("SELECT * FROM ProfilMedical WHERE ownerEmail = :email")
+    fun getProfilesForUser(email: String): List<ProfilMedical>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertProfil(profil: ProfilMedical)

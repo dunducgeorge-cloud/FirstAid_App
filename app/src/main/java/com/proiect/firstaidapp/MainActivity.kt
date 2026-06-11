@@ -50,7 +50,8 @@ class MainActivity : ComponentActivity() {
 
                 LaunchedEffect(emailLogat) {
                     if (emailLogat.isNotEmpty()) {
-                        val lista = withContext(Dispatchers.IO) { dao.getAllProfiles() }
+                        val lista = withContext(Dispatchers.IO) { dao.getProfilesForUser(emailLogat) }
+
                         profileState.clear()
                         profileState.addAll(lista)
                     }
@@ -143,7 +144,8 @@ class MainActivity : ComponentActivity() {
                                     val profilNou = ProfilMedical(
                                         nume = numeProfil,
                                         grupa = grupaMedicala,
-                                        alergii = alergiiProfil
+                                        alergii = alergiiProfil,
+                                        ownerEmail = emailLogat
                                     )
 
                                     CoroutineScope(Dispatchers.IO).launch {

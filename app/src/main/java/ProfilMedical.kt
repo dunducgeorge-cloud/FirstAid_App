@@ -3,11 +3,13 @@ package com.proiect.firstaidapp
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "profile_table")
-data class ProfilMedicalEntity(
-    @PrimaryKey val id: String = java.util.UUID.randomUUID().toString(),
+@Entity
+data class ProfilMedical(
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val nume: String,
     val grupa: String,
-    val alergii: String
+    val alergii: String,
+    val ownerEmail: String
 )
+
 
