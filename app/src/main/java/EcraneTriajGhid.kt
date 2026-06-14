@@ -85,7 +85,7 @@ fun DetaliiScreen(urgenta: String, onBack: () -> Unit) {
         "Infarct" -> "1. Se apeleaza imediat numarul de urgenta 112.\n" + "2.Victima trebuie asezata intr-o pozitie confortabila, semi-sezand.\n" + "3. Se descheie hainele stranse pentru a usura respiratia si se incearca calmarea persoanei."
         "Lesin" -> "1. Victima se asaza intinsa pe spate, ridicandu-i picioarele la aproximativ 30 de centimetri de sol.\n" + "2. Este important sa aiba acces la aer curat si sa i se verifice constant respiratia."
         "Fracturi" -> "1. Nu incercati sa miscati sau sa realiniati osul rupt.\n" + "2. Zona se imobilizeaza rapid folosind o atela improvizata din materiale la indemana si se pune gheata local pentru a reduce umflatura."
-        else -> "1. Se suna de urgenta la 112. \n" + "2. Ramaneti langa persoana afectata si monitorizati-i starea pana sosesc medicii.\n" + 3". Nu ii dati apa sau mancare daca este in stare de soc."
+        else -> "1. Se suna de urgenta la 112. \n" + "2. Ramaneti langa persoana afectata si monitorizati-i starea pana sosesc medicii.\n" + "3. Nu ii dati apa sau mancare daca este in stare de soc."
     }
     Column(modifier = Modifier
         .fillMaxSize()
