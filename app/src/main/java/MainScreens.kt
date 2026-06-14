@@ -154,7 +154,7 @@ fun HomeScreen(
                 shape = RoundedCornerShape(16.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1976D2))
             ) {
-                Text("POSTARI API", fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                Text("ISTORIC POSTARI EVENIMENTE ", fontSize = 16.sp, fontWeight = FontWeight.Bold)
             }
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -175,7 +175,7 @@ fun HomeScreen(
                 shape = RoundedCornerShape(16.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF6A1B9A))
             ) {
-                Text("CREEAZA POSTARE API", fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                Text("CREEAZA POSTARE EVENIMENT", fontSize = 16.sp, fontWeight = FontWeight.Bold)
             }
 
             Spacer(modifier = Modifier.height(16.dp))

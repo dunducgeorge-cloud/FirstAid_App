@@ -80,12 +80,12 @@ fun GhidScreen(onBackClick: () -> Unit, onUrgentaClick: (String) -> Unit) {
 @Composable
 fun DetaliiScreen(urgenta: String, onBack: () -> Unit) {
     val textGhid = when(urgenta) {
-        "Arsuri" -> "Zona afectata se tine sub apa calduta timp de 15-20 de minute. Nu se sparg veziculele formate sub nicio forma. Ulterior se acopera totul cu un pansament steril lasat mai lejer."
-        "Inecare" -> "Persoana trebuie incurajata sa tuseasca puternic. Se aplica maxim 5 lovituri ferme pe spate, intre omoplati. Daca blocajul nu cedeaza, se trece la aplicarea manevrei Heimlich."
-        "Infarct" -> "Se apeleaza imediat numarul de urgenta 112. Victima trebuie asezata intr-o pozitie confortabila, semi-sezand. Se descheie hainele stranse pentru a usura respiratia si se incearca calmarea persoanei."
-        "Lesin" -> "Victima se asaza intinsa pe spate, ridicandu-i picioarele la aproximativ 30 de centimetri de sol. Este important sa aiba acces la aer curat si sa i se verifice constant respiratia."
-        "Fracturi" -> "Nu incercati sa miscati sau sa realiniati osul rupt. Zona se imobilizeaza rapid folosind o atela improvizata din materiale la indemana si se pune gheata local pentru a reduce umflatura."
-        else -> "Se suna de urgenta la 112. Ramaneti langa persoana afectata si monitorizati-i starea pana sosesc medicii. Nu ii dati apa sau mancare daca este in stare de soc."
+        "Arsuri" -> "1.Zona afectata se tine sub apa calduta timp de 15-20 de minute.\n" + "2.Nu se sparg veziculele formate sub nicio forma.\n" + "3. Ulterior se acopera totul cu un pansament steril lasat mai lejer."
+        "Inecare" -> "1.Persoana trebuie incurajata sa tuseasca puternic. \n" + "2.Se aplica maxim 5 lovituri ferme pe spate, intre omoplati.\n" + "3. Daca blocajul nu cedeaza, se trece la aplicarea manevrei Heimlich."
+        "Infarct" -> "1. Se apeleaza imediat numarul de urgenta 112.\n" + "2.Victima trebuie asezata intr-o pozitie confortabila, semi-sezand.\n" + "3. Se descheie hainele stranse pentru a usura respiratia si se incearca calmarea persoanei."
+        "Lesin" -> "1. Victima se asaza intinsa pe spate, ridicandu-i picioarele la aproximativ 30 de centimetri de sol.\n" + "2. Este important sa aiba acces la aer curat si sa i se verifice constant respiratia."
+        "Fracturi" -> "1. Nu incercati sa miscati sau sa realiniati osul rupt.\n" + "2. Zona se imobilizeaza rapid folosind o atela improvizata din materiale la indemana si se pune gheata local pentru a reduce umflatura."
+        else -> "1. Se suna de urgenta la 112. \n" + "2. Ramaneti langa persoana afectata si monitorizati-i starea pana sosesc medicii.\n" + 3". Nu ii dati apa sau mancare daca este in stare de soc."
     }
     Column(modifier = Modifier
         .fillMaxSize()
